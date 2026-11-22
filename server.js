@@ -1,4 +1,7 @@
 const express = require("express"), crypto = require("crypto"), fs = require("fs"), path = require("path");
+if (typeof process.loadEnvFile === "function" && fs.existsSync(".env")) {
+  try { process.loadEnvFile(".env"); } catch {}
+}
 const store = require("./lib/store"), V = require("./lib/validate"), push = require("./lib/push");
 const { limiter, loginGuard } = require("./lib/ratelimit");
 
