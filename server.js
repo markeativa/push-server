@@ -148,7 +148,18 @@ app.post("/api/login", wrap(async (req, res) => {
   res.json({ token });
 }));
 
+function safeCompare(a, b) {
+  if (typeof a !== "string" || typeof b !== "string") return false;
+  const ba = Buffer.from(a), bb = Buffer.from(b);
+  return ba.length === bb.length && crypto.timingSafeEqual(ba, bb);
+}
+
 const auth = wrap(async (req, res, next) => {
+  const apiKey = req.get("x-api-key") || (req.get("authorization") || "").replace(/^Bearer\s+/i, "");
+  if (apiKey) {
+    if (process.env.API_KEY && safeCompare(apiKey, process.env.API_KEY)) return next();
+    if (process.env.ADMIN_PASSWORD && safeCompare(apiKey, process.env.ADMIN_PASSWORD)) return next();
+  }
   const m = /^Bearer ([A-Za-z0-9_-]{20,100})$/.exec(req.get("authorization") || "");
   if (m && await store.validSession(sha(m[1]))) { req.sessionHash = sha(m[1]); return next(); }
   res.status(401).json({ error: "Não autorizado." });
