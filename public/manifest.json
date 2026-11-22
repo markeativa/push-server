@@ -1,0 +1,1 @@
+{ "name": "Demo Push", "short_name": "Demo", "start_url": "/demo.html", "display": "standalone", "background_color": "#0d1f2d", "theme_color": "#0b7a75" }

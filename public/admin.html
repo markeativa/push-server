@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Painel Push</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+<div class="app">
+ <aside class="side">
+  <div class="brand"><i><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/></svg></i>Painel Push</div>
+  <nav id="nav">
+   <button data-v="painel" aria-current="page"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>Painel</button>
+   <button data-v="enviar"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>Enviar</button>
+   <button data-v="historico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Histórico</button>
+   <button data-v="inscritos"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>Inscritos</button>
+   <button data-v="sites"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>Sites</button>
+  </nav>
+  <button class="btn" id="logout" type="button">Sair</button>
+ </aside>
+
+ <main>
+  <section class="view on" id="v-painel">
+   <h1>Painel</h1><p class="sub">Visão geral das suas notificações.</p>
+   <div class="bar"><span></span><select class="fsite" aria-label="Filtrar por site"></select></div>
+   <div class="stats">
+    <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span><b id="s-subs">0</b><span>Inscritos ativos</span></div>
+    <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg></span><b id="s-sent">0</b><span>Notificações enviadas</span></div>
+    <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h9"/></svg></span><b id="s-clicks">0</b><span>Cliques</span></div>
+    <div class="card stat"><span class="ico"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span><b id="s-ctr">0%</b><span>Taxa de cliques</span></div>
+   </div>
+   <p class="hint2" id="s-note"></p>
+   <div class="card"><h2>Últimas notificações</h2><ul class="list" id="recent"></ul></div>
+  </section>
+
+  <section class="view" id="v-enviar">
+   <h1>Enviar notificação</h1><p class="sub">Preencha os campos e confira a prévia antes de enviar.</p>
+   <div class="send">
+    <form class="card" id="form" novalidate>
+     <div class="field"><label for="site">Site de destino</label><select id="site"></select></div>
+     <div class="field"><span class="lbl">Ícone do aplicativo</span>
+      <div class="up"><div class="ic" id="icon-prev">A</div>
+       <div><button type="button" class="btn" id="pick">Escolher imagem</button><input type="file" id="file" accept="image/png,image/jpeg,image/webp" hidden></div></div></div>
+     <div class="field"><label for="title">Título <small id="c-title">0/50</small></label><input type="text" id="title" maxlength="50" placeholder="Ex.: Frete grátis hoje"></div>
+     <div class="field"><label for="body">Mensagem <small id="c-body">0/140</small></label><textarea id="body" maxlength="140" placeholder="Ex.: Aproveite até meia-noite em todo o site."></textarea></div>
+     <div class="field"><label for="url">Link de destino</label><input type="url" id="url" placeholder="https://seusite.com/oferta"><p class="hint2">Os cliques são contados por um link rastreável e a pessoa é levada a este endereço.</p></div>
+     <div class="field"><label for="when">Agendar envio (opcional)</label><input type="datetime-local" id="when"><p class="hint2" id="when-h">Em branco = enviar agora. Horário do seu dispositivo.</p><p class="err" id="err"></p></div>
+     <div class="actions">
+      <button type="button" class="btn" id="preview">Pré-visualizar</button>
+      <button type="submit" class="btn primary" id="go">Enviar notificação</button>
+     </div>
+    </form>
+    <div class="pv" id="pv">
+     <div class="phone"><div class="clock"><b>09:41</b><span id="clock-d">hoje</span></div>
+      <div class="push" id="push"><div class="ic" id="push-ic">A</div>
+       <div><div class="top"><span id="push-app">Seu app</span><span>agora</span></div><div class="t" id="push-t">Título da notificação</div><div class="m" id="push-m">A mensagem aparece aqui.</div></div></div></div>
+     <p class="hint" id="push-url">Link: —</p>
+    </div>
+   </div>
+  </section>
+
+  <section class="view" id="v-historico">
+   <h1>Histórico</h1><p class="sub">Tudo o que já foi enviado ou está agendado. Clique em uma linha para ver os detalhes.</p>
+   <div class="bar"><span></span><select class="fsite" aria-label="Filtrar por site"></select></div>
+   <div class="card wrap"><table class="table"><thead><tr><th>Notificação</th><th>Site</th><th>Data e horário</th><th>Entregas</th><th>Cliques</th><th>Taxa</th><th>Situação</th></tr></thead><tbody id="hist"></tbody></table>
+    <div class="more"><button class="btn" id="hist-more" type="button" hidden>Carregar mais</button></div></div>
+  </section>
+
+  <section class="view" id="v-inscritos">
+   <h1>Inscritos</h1><p class="sub">Dispositivos inscritos em cada site. Nenhum dado pessoal é exibido.</p>
+   <div class="bar"><select id="sub-status" aria-label="Filtrar por situação"><option value="">Todas as situações</option><option value="active">Ativas</option><option value="expired">Expiradas</option></select><select class="fsite" aria-label="Filtrar por site"></select></div>
+   <div class="card wrap"><table class="table"><thead><tr><th>Site de origem</th><th>Inscrito em</th><th>Dispositivo</th><th>Situação</th><th></th></tr></thead><tbody id="subs"></tbody></table>
+    <div class="more"><button class="btn" id="subs-more" type="button" hidden>Carregar mais</button></div></div>
+  </section>
+
+  <section class="view" id="v-sites">
+   <h1>Sites e aplicativos</h1><p class="sub">Cada site tem seu código, suas origens autorizadas e seus próprios inscritos.</p>
+   <div class="cols">
+    <div class="sites" id="sites"></div>
+    <form class="card" id="sform" novalidate>
+     <h2 id="sform-t">Cadastrar site</h2>
+     <div class="field"><label for="sname">Nome</label><input type="text" id="sname" maxlength="60" placeholder="Ex.: Loja Online"></div>
+     <div class="field"><label for="sorig">Origens autorizadas</label><textarea id="sorig" placeholder="https://minhaloja.com&#10;https://www.minhaloja.com"></textarea><p class="hint2">Uma por linha. Só inscrições vindas dessas origens são aceitas.</p></div>
+     <div class="field"><label class="check"><input type="checkbox" id="sext"><span>Permitir links de destino fora deste site</span></label></div>
+     <p class="err" id="serr"></p>
+     <div class="actions"><button type="button" class="btn" id="scancel" hidden>Cancelar edição</button><button class="btn primary" id="ssave">Cadastrar</button></div>
+    </form>
+   </div>
+  </section>
+ </main>
+</div>
+
+<dialog id="dlg"><div id="dlg-body"></div><div class="actions"><button type="button" class="btn danger" id="dlg-cancel" hidden>Cancelar agendamento</button><button type="button" class="btn" id="dlg-close">Fechar</button></div></dialog>
+
+<div class="login" id="login" hidden><form class="card" id="lform"><h1>Painel Push</h1><p class="sub">Entre com a senha de administrador.</p>
+<div class="field"><label for="pw">Senha</label><input type="password" id="pw" autocomplete="current-password" required><p class="err" id="lerr"></p></div>
+<button class="btn primary">Entrar</button></form></div>
+<div class="toast" id="toast" role="status"></div>
+<script src="./admin.js"></script>
+</body>
+</html>
